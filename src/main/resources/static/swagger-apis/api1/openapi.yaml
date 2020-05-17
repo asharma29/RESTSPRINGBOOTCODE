@@ -1,0 +1,1365 @@
+
+openapi: 3.0.0
+info:
+  title: Maveric Digital Interview Process APIs
+  description: REST APIs supporting Maveric Digital Interview process. Mainly contains APIs for candidate registration, login, taking tests, storing test results, viewing candidate details and test reports
+  version: 0.0.1
+servers:
+  - url: http:/localhost:8080/
+    description: Local development server
+
+paths:
+  /login:
+    post:
+      summary: To allow candidate to login as an existing candidate.
+      description: API to login as an existing candidate.
+      operationId: loginCandidate
+      tags:
+        - Authentication
+      requestBody:
+        description: Candidate credentials to be verified
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+      responses:
+        '201':
+          $ref: '#/components/responses/LoginSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+  /candidates:
+    get:
+      summary: To get the list of all candidates.
+      description: API to get the list of all candidates.
+      operationId: getCandidates
+      tags:
+        - Candidates
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema: 
+            type: string
+      responses:
+        '200':
+          description: List of all candidates
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Candidate'
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+    post:
+      summary: To register a new candidate.
+      description: API to register a new candidate.
+      operationId: registerCandidate
+      tags:
+        - Candidates
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema: 
+            type: string
+      requestBody:
+        description: Candidate details to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Candidate'
+      responses:
+        '201':    # status code
+          description: Candidate successfully registered
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+  /candidates/{candidateId}:
+    get:
+      summary: To get the details of a candidate
+      description: API to get the details of a candidate
+      tags:
+        - Candidates
+      operationId: getCandidateDetails
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema: 
+            type: string
+        - name: candidateId
+          in: path
+          description: Candidate ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':    # status code
+          description: Candidate successfully registered
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Candidate'
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+    put:
+      summary: To update a candidate details
+      description: API to update a candidate details
+      tags:
+        - Candidates
+      operationId: updateCandidate
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema: 
+            type: string
+        - name: candidateId
+          in: path
+          description: Candidate ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Candidate details to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Candidate'
+      responses:
+        '200':    # status code
+          description: Candidate successfully updated
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+    delete:
+      summary: To delete a candidate
+      description: API to delete a candidate details
+      tags:
+        - Candidates
+      operationId: deleteCandidate
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema: 
+            type: string
+        - name: candidateId
+          in: path
+          description: Candidate ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':    # status code
+          description: Candidate successfully deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+  /employees:
+    get:
+      summary: To get the list of all employees.
+      description: API to get the list of all employees.
+      operationId: getEmployees
+      tags:
+        - Employees
+      responses:
+        '200':
+          description: List of all employees
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Employee'
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+    post:
+      summary: To register a new employee.
+      description: API to register a new employee.
+      operationId: registerEmployee
+      tags:
+        - Employees
+      requestBody:
+        description: Employee details to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+      responses:
+        '201':    # status code
+          description: Employee successfully registered
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+  /employees/{employeeId}:
+    get:
+      summary: To get the details of a employee
+      description: API to get the details of a employee
+      tags:
+        - Employees
+      operationId: getEmployeeDetails
+      parameters:
+        - name: employeeId
+          in: path
+          description: Employee ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':    # status code
+          description: Employee successfully registered
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Employee'
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+    put:
+      summary: To update a employee details
+      description: API to update a employee details
+      tags:
+        - Employees
+      operationId: updateEmployee
+      parameters:
+        - name: employeeId
+          in: path
+          description: Employee ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Employee details to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+      responses:
+        '200':    # status code
+          description: Employee details successfully updated
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+    delete:
+      summary: To delete a employee
+      description: API to delete a employee details
+      tags:
+        - Employees
+      operationId: deleteEmployee
+      parameters:
+        - name: employeeId
+          in: path
+          description: Employee ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':    # status code
+          description: Employee successfully deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+  /tests:
+    get:
+      summary: To get the list of all tests.
+      description: API to get the list of all tests.
+      operationId: getTests
+      tags:
+        - Tests
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema: 
+            type: string
+      responses:
+        '200':
+          description: List of all tests
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Test'
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+    post:
+      summary: To add a new test.
+      description: API to register a new test.
+      operationId: registerTest
+      tags:
+        - Tests
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema: 
+            type: string
+      requestBody:
+        description: Test details to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Test'
+      responses:
+        '201':    # status code
+          description: Test successfully added
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+  /tests/{testId}:
+    get:
+      summary: To get the details of a employee
+      description: API to get the details of a employee
+      tags:
+        - Tests
+      operationId: getTestDetails
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema: 
+            type: string
+        - name: testId
+          in: path
+          description: Test ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':    # status code
+          description: Test details successfully obtained
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Candidate'
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+    put:
+      summary: To update a test details
+      description: API to update a test details
+      tags:
+        - Tests
+      operationId: updateTest
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema: 
+            type: string
+        - name: testId
+          in: path
+          description: Test ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Test details to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Candidate'
+      responses:
+        '200':    # status code
+          description: Test details successfully updated
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+    delete:
+      summary: To delete a test
+      description: API to delete a test 
+      tags:
+        - Tests
+      operationId: deleteTest
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema: 
+            type: string
+        - name: testId
+          in: path
+          description: Test ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':    # status code
+          description: Test successfully deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+  /scores:
+    get:
+      summary: To get the list of all scores.
+      description: API to get the list of all scores.
+      operationId: getScores
+      tags:
+        - Scores
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema: 
+            type: string
+      responses:
+        '200':
+          description: List of all scores
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Score'
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+    post:
+      summary: To add a new score.
+      description: API to add a new score.
+      operationId: registerScore
+      tags:
+        - Scores
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema: 
+            type: string
+      requestBody:
+        description: Score to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Score'
+      responses:
+        '201':    # status code
+          description: Score successfully added
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+  /sccores/{scoreId}:
+    get:
+      summary: To get the details of a score
+      description: API to get the details of a score
+      tags:
+        - Scores
+      operationId: getScoreDetails
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema: 
+            type: string
+        - name: scoreId
+          in: path
+          description: Score ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':    # status code
+          description: Getting score details was successful
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Score'
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+    put:
+      summary: To update a score details
+      description: API to update a score details
+      tags:
+        - Scores
+      operationId: updateScore
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema: 
+            type: string
+        - name: scoreId
+          in: path
+          description: Score ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Score details to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Candidate'
+      responses:
+        '200':    # status code
+          description: Score successfully updated
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+    delete:
+      summary: To delete a score
+      description: API to delete a score
+      tags:
+        - Scores
+      operationId: deleteScore
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema: 
+            type: string
+        - name: scoreId
+          in: path
+          description: Score ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':    # status code
+          description: Score successfully deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+  /difficultyLevels:
+    get:
+      summary: To get the list of all difficulty levels.
+      description: API to get the list of all difficulty levels.
+      operationId: getDifficultyLevels
+      tags:
+        - DifficultyLevels
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema: 
+            type: string
+      responses:
+        '200':
+          description: List of all difficulty levels
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/DifficultyLevel'
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+    post:
+      summary: To add a new difficulty level.
+      description: API to add a new difficulty level.
+      operationId: addDifficultyLevel
+      tags:
+        - DifficultyLevels
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema: 
+            type: string
+      requestBody:
+        description: Candidate details to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DifficultyLevel'
+      responses:
+        '201':    # status code
+          description: DifficultyLevel successfully added
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+  /difficultyLevels/{difficultyLevelId}:
+    get:
+      summary: To get the details of a difficulty level
+      description: API to get the details of a difficulty level
+      tags:
+        - DifficultyLevels
+      operationId: getDifficultyLevelDetails
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema: 
+            type: string
+        - name: difficultyLevelId
+          in: path
+          description: DifficultyLevel ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':    # status code
+          description: Getting difficulty level was successful
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/DifficultyLevel'
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+    put:
+      summary: To update a difficulty level details
+      description: API to update a difficult level details
+      tags:
+        - DifficultyLevels
+      operationId: updateDifficultyLevel
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema: 
+            type: string
+        - name: difficultyLevelId
+          in: path
+          description: Difficulty level ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Difficulty level details to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DifficultyLevel'
+      responses:
+        '200':    # status code
+          description: Difficulty level successfully updated
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+    delete:
+      summary: To delete a difficulty level
+      description: API to delete a difficulty level 
+      tags:
+        - DifficultyLevels
+      operationId: deleteDifficultyLevel
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema: 
+            type: string
+        - name: difficultyLevelId
+          in: path
+          description: Difficulty level ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':    # status code
+          description: Difficulty level successfully deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+  /subjects:
+    get:
+      summary: To get the list of all subjects.
+      description: API to get the list of all subjects.
+      operationId: getSubjects
+      tags:
+        - Subjects
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema: 
+            type: string
+      responses:
+        '200':
+          description: List of all subjects
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Subject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+    post:
+      summary: To add a new subject.
+      description: API to add a new subject.
+      operationId: addSubject
+      tags:
+        - Subjects
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema: 
+            type: string
+      requestBody:
+        description: Subject details to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subject'
+      responses:
+        '201':    # status code
+          description: Candidate successfully registered
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+  /subjects/{subjectId}:
+    get:
+      summary: To get the details of a subject
+      description: API to get the details of a subject
+      tags:
+        - Subjects
+      operationId: getSubjectDetails
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema: 
+            type: string
+        - name: subjectId
+          in: path
+          description: Subject ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':    # status code
+          description: Getting subject details was successful
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Subject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+    put:
+      summary: To update a subject details
+      description: API to update a subject details
+      tags:
+        - Subjects
+      operationId: updateSubject
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema: 
+            type: string
+        - name: subjectId
+          in: path
+          description: Subject ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Subject details to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subject'
+      responses:
+        '200':    # status code
+          description: Subject successfully updated
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+    delete:
+      summary: To delete a subject
+      description: API to delete a subject
+      tags:
+        - Employees
+      operationId: deleteSubject
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema: 
+            type: string
+        - name: subjectId
+          in: path
+          description: Subject ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':    # status code
+          description: Subject successfully deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+  /questionAndAnswers:
+    get:
+      summary: To get the list of all questions.
+      description: API to get the list of all questions.
+      operationId: getQuestionAndAnswers
+      tags:
+        - QuestionAndAnswers
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema: 
+            type: string
+      responses:
+        '200':
+          description: List of all questions
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/QuestionAndAnswers'
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+    post:
+      summary: To add a new question.
+      description: API to add a new question.
+      operationId: addQuestionAndAnswer
+      tags:
+        - QuestionAndAnswers
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema: 
+            type: string
+      requestBody:
+        description: Question details to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionAndAnswers'
+      responses:
+        '201':    # status code
+          description: Question and answer successfully added
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+  /questionAndAnswers/{qaId}:
+    get:
+      summary: To get the details of a question
+      description: API to get the list of all details of a question
+      tags:
+        - QuestionAndAnswers
+      operationId: getQuestionDetails
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema: 
+            type: string
+        - name: qaId
+          in: path
+          description: Question ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':    # status code
+          description: Getting question details was successful
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Candidate'
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+    put:
+      summary: To update a question details
+      description: API to update a question details
+      tags:
+        - QuestionAndAnswers
+      operationId: updateQuestionAndAnswers
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema: 
+            type: string
+        - name: qaId
+          in: path
+          description: Question ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Question details to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Candidate'
+      responses:
+        '200':    # status code
+          description: Question details successfully updated
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+    delete:
+      summary: To delete a question
+      description: API to delete a question
+      tags:
+        - QuestionAndAnswers
+      operationId: deleteQuestion
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema: 
+            type: string
+        - name: qaId
+          in: path
+          description: Question ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':    # status code
+          description: Question successfully deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'   
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/UnknownError'
+components:
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  responses:
+    LoginSuccess:
+      description: Login successful
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LoginSuccess'
+    UnknownError:
+      description: Unknown error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    # Schema for error response body
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
+    LoginSuccess:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          description: Access Token
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          description: Candidate's email id
+        password:
+          type: string
+          description: Candidate's password
+    Candidate:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: The candidate ID.
+        firstName:
+          type: string
+          description: Candidate's first name
+        lastName:
+          type: string
+          description: Candidate's last name
+        middleName:
+          type: string
+          description: Candidate's middle name
+        dob:
+          type: string
+          format: date
+          description: Candidate's date of birth
+        experience:
+          type: number
+          description: Candidate's total experience
+        skillset:
+          type: string
+          description: Brief description about Candidate's technical skillset
+        panNo:
+          type: string
+          description: Candidate's PAN number
+        email:
+          type: string
+          description: Candidate's email id
+        phoneNo:
+          type: number
+          description: Candidate's phone number
+        noticePeriod:
+          type: number
+          description: Candidate's notice period in months
+        gender:
+          type: string
+          description: Candidate's gender (Male/Female)
+    Subject:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique subject id
+        name:
+          type: string
+          description: Name of the subject like Angular, Java etc
+    Answer:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique id to identify this answer
+        ans:
+          type: string
+          description: One of the answer in the answers array
+        isCorrectAns:
+          type: boolean
+          description: Indidates wheather this is the right answer or not
+    QuestionAndAnswers:
+      type: object
+      properties:
+        _id: 
+          type: string
+          description: Unique ID to identify the question
+        complexityType:
+          type: string
+          enum: ["easy", "medium", "hard", "hardest"]
+          description: Complexity of the question like easy, medium, hard, hardest
+        question:
+          type: string
+          description: Question to be answered
+        answers:
+          type: array
+          items:
+            $ref : "#/components/schemas/Answer"
+          description: Array of Answer objects
+    Score:
+      type: object
+      properties:
+        _id: 
+          type: string
+          description: Unique ID to identify the score record
+        subject: 
+          type: string
+          description: Name of the subject like angular, java etc
+        complexityType:
+          type: string
+          enum: ["easy", "medium", "hard", "hardest"]
+          description: Complexity of the question like easy, medium, hard, hardest
+        noOfQuestions:
+          type: number
+          description: Number of questions that were persent in this test
+        cutOffPercentage:
+          type: number
+          description: Cutoff percentage
+        scoreInPercentage:
+          type: number
+          description: Score in percentage
+        testDate:
+          type: string
+          format: date-time
+          description: Date and time when this test was taken
+        timeToAnswerInMin:
+          type: number
+          description: Time to answer the test in minutes
+        status:
+          type: string
+          enum: ["Pass", "Fail"]
+          description: Overall Pass or Fail status based on cut off percentage
+    Test:
+      type: object
+      properties:
+        _id: 
+          type: string
+          description: Unique ID to identify the test
+        subject:
+          type: string
+          description: Name of the test subject like angular, java etc
+        complexityType:
+          type: string
+          enum: ["easy", "medium", "hard", "hardest"]
+          description: Complexity of the test based on experience level
+        noOfQuestions:
+          type: number
+          description: Number of questions in this test
+        timeToAnswerInMin:
+          type: number
+          description: Time available to answer this test in minutes
+        cutOffPercentage:
+          type: number
+          description: Cut off percentage 
+    Employee:
+      type: object
+      properties:
+        _id: 
+          type: string
+          description: Unique ID to identify the employee
+        firstName:
+          type: string
+          description: Employee's first name
+        lastName:
+          type: string
+          description: Employee's last name
+        middleName:
+          type: string
+          description: Employee's middle name
+        empId:
+          type: string
+          description: Employee ID
+        password:
+          type: string
+          description: Hashed password for login
+        email:
+          type: string
+          description: Employee's email id
+        phoneNo: 
+          type: number
+          description: Employee's phone number
+        designation:
+          type: string
+          description: Employee's designation with in the organisation
+    DifficultyLevel:
+      type: object
+      properties:
+        _id: 
+          type: string
+          description: Unique ID to identify the record
+        complexityType:
+          type: string
+          enum: ["easy", "medium", "hard", "hardest"]
+          description: Complexity of the test based on experience level
+        maxYrsOfExperience:
+          type: number
+          enum: [3, 5, 8]
+          description: Maximum experience level that has a one to one mapping with complexityType i.e, < 3 easy, >3 but < 5 medium, > 5 but < 8 hard, >8 hardest
